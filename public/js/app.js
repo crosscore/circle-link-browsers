@@ -4,27 +4,40 @@ const socket = io();
 
 const circle = document.getElementById('circle');
 let x = 0;
-const speed = 5;
+const speed = 1.5;
+let moving = false; // 初期状態では動かない
+circle.style.display = 'none'; // 最初は円を非表示にする
 
 function moveCircle() {
-    x += speed;
-    circle.style.left = x + 'px';
+    if (moving) {
+        x += speed;
+        circle.style.left = x + 'px';
 
-    // 画面の幅を超えたら、サーバーに通知
-    if (x > window.innerWidth) {
-        socket.emit('circleMoved', { position: x });
-        x = 0; // また左から開始
+        if (x > window.innerWidth) {
+            socket.emit('circleMoved', {});
+            moving = false; // 円が右端に達したら動きを停止
+        }
     }
 
     requestAnimationFrame(moveCircle);
 }
 
-// ページの読み込み完了後に円を動かす
-window.onload = () => {
-    moveCircle();
-};
+window.onload = moveCircle;
 
-// サーバーからのメッセージを受け取る
-socket.on('circleMove', (data) => {
-    x = data.position;
+socket.on('initialize', (data) => {
+    if (data.isFirstClient) {
+        moving = true;
+        circle.style.display = 'block'; // 最初のクライアントであれば円を表示
+    } else {
+        moving = false;
+        x = -circle.offsetWidth; // 円の右端が画面の左端に合わせる
+        circle.style.left = x + 'px';
+        circle.style.display = 'none';
+    }
+});
+
+socket.on('circleMove', () => {
+    x = -circle.offsetWidth; // 円の右端が画面の左端に合わせる
+    moving = true; // 円の動きを再開
+    circle.style.display = 'block'; // 円を表示
 });

@@ -14,14 +14,21 @@ const server = http.createServer(app);
 // Socket.ioの初期化
 const io = socketIo(server);
 
+
+let firstClient = null; // 最初に接続したクライアントを管理する変数
 // クライアントからの接続を監視
 io.on('connection', (socket) => {
     console.log('A user connected');
 
+	// 最初に接続したクライアントにだけ初期化メッセージを送信
+    if (!firstClient) {
+        firstClient = socket.id;
+    }
+    socket.emit('initialize', { isFirstClient: socket.id === firstClient });
+
     // クライアントからメッセージを受け取った時の処理
-    socket.on('circleMoved', (data) => {
-        // 他のクライアントにメッセージを中継
-        io.emit('circleMove', data);
+    socket.on('circleMoved', () => {
+		socket.broadcast.emit('circleMove'); // このクライアント以外の全てのクライアントにイベントを送信
     });
 
     // 接続が切断された時の処理
