@@ -2,17 +2,24 @@
 const socket = io();
 const circle = document.getElementById('circle');
 let x = 0;
-const speed = 3.9;
+const speed = 3;
 let moving = false; // 初期状態では動かない
 circle.style.display = 'none'; // 最初は円を非表示にする
 
 function moveCircle() {
     if (moving) {
         x += speed;
+        socket.emit('debug', `Moving circle, x: ${x}`); // サーバーにデバッグメッセージを送信
         circle.style.left = x + 'px';
-        if (x > window.innerWidth) {
-            socket.emit('circleMoved', {});
-            moving = false; // 円が右端に達したら動きを停止
+        // 円が画面の右端に到達したらイベントを送信
+        if (x >= window.innerWidth) {
+            socket.emit('debug', 'Circle reached the right edge of the screen'); // サーバーにデバッグメッセージを送信
+            socket.emit('circleMoved');
+        }
+        // 円が画面の右端に完全に消えたら停止
+        if (x >= window.innerWidth + circle.offsetWidth) {
+            socket.emit('debug', 'Circle completely disappeared from the screen'); // サーバーにデバッグメッセージを送信
+            moving = false; // 円が完全に画面から消えたら動きを停止
         }
     }
     requestAnimationFrame(moveCircle);
