@@ -14,9 +14,9 @@ window.onload = function() {
 
     // 円の初期設定
     circle = {
-        x: canvas.width / 2,
+        x: -300,
         y: canvas.height / 2,
-        size: 50,
+        size: 300,
         dx: 2
     };
 
