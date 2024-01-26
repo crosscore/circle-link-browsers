@@ -13,12 +13,12 @@ function moveCircle() {
         circle.style.left = x + 'px';
         // 円が画面の右端に到達したらイベントを送信
         if (x >= window.innerWidth) {
-            socket.emit('debug', 'Circle reached the right edge of the screen'); // サーバーにデバッグメッセージを送信
+            socket.emit('debug', 'Circle reached the right edge of the screen');
             socket.emit('circleMoved');
         }
         // 円が画面の右端に完全に消えたら停止
         if (x >= window.innerWidth + circle.offsetWidth) {
-            socket.emit('debug', 'Circle completely disappeared from the screen'); // サーバーにデバッグメッセージを送信
+            socket.emit('debug', 'Circle completely disappeared from the screen');
             moving = false; // 円が完全に画面から消えたら動きを停止
         }
     }
