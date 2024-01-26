@@ -23,7 +23,7 @@ function moveCircle() {
             socket.emit('circleMoved');
         }
         // 円が画面の右端に完全に消えたら停止
-        if (x - circle.offsetWidth * 0.5 >= window.innerWidth) {
+        if (x >= window.innerWidth + circle.offsetWidth) {
             socket.emit('debug', 'Circle completely disappeared from the screen');
             moving = false;
         }

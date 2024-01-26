@@ -43,7 +43,7 @@ function update() {
 
     circle.x += circle.dx;
 
-    if (circle.x + circle.size > canvas.width) {
+    if (circle.x > canvas.width) {
         if (!isCircleAtRightEdge) {
             isCircleAtRightEdge = true;
             socket.emit('circleMoved', { x: circle.x, y: circle.y, isAtRightEdge: true });
@@ -54,7 +54,6 @@ function update() {
             socket.emit('circleMoved', { x: circle.x, y: circle.y, isAtRightEdge: false });
         }
     }
-
     requestAnimationFrame(update);
 }
 
