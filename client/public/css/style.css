@@ -1,0 +1,21 @@
+/* circle-link-browsers/client/public/css/style.css */
+
+/* 円のスタイル設定 */
+#circle {
+  width: 300px; /* 円の幅 */
+  height: 300px; /* 円の高さ */
+  background-color: rgb(32, 127, 252); /* 円の背景色 */
+  border-radius: 50%; /* 円形にするための設定 */
+  position: absolute; /* 絶対位置指定 */
+  /* display: none; /* 最初は非表示にする */
+  top: 50%; /* 上から画面の中央 */
+  left: 50%; /* 左から画面の中央 */
+  transform: translate(-50%, -50%); /* 中心点を正確に中央に合わせる */
+}
+
+/* ページ全体のスタイル設定 */
+body {
+  margin: 0; /* 余白の削除 */
+  overflow: hidden; /* 画面外のスクロールバーを隠す */
+  background-color: #1e1e1e; /* 背景色を設定（例：淡いグレー） */
+}

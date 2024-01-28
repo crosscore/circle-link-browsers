@@ -1,0 +1,26 @@
+<!-- circle-link-browsers/client/public/index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <title>Circle Link Browsers</title>
+  <link rel="stylesheet" href="%PUBLIC_URL%/css/style.css"> <!-- 外部CSSファイルへのリンク -->
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!-- Socket.ioのクライアントライブラリを読み込む -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Reactアプリケーションのビルドによって生成されるスクリプトファイル -->
+  <script src="%PUBLIC_URL%/js/app.js"></script>
+</body>
+
+</html>
