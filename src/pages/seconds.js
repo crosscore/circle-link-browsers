@@ -4,16 +4,18 @@ import MovingCircle from "../components/MovingCircle";
 
 const SecondPage = () => {
   const [startMoving, setStartMoving] = useState(false);
+  const ws = new WebSocket("ws://localhost:8080");
 
-  // TODO: 画面1からの信号を受け取ったら setStartMoving(true) を実行する
   useEffect(() => {
-    const handleStorageChange = () => {
-      if (localStorage.getItem("circleReachedEnd") === "true") {
-        setStartMoving(true); // 円2のアニメーションを開始
+    ws.onmessage = (event) => {
+      if (event.data === "startSecondCircle") {
+        setStartMoving(true);
       }
     };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+
+    return () => {
+      ws.close();
+    };
   }, []);
 
   return <MovingCircle startMoving={startMoving} />;

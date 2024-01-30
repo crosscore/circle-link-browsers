@@ -4,20 +4,26 @@ import MovingCircle from "../components/MovingCircle";
 
 const IndexPage = () => {
   const [startMoving, setStartMoving] = useState(true);
+  const ws = new WebSocket("ws://localhost:8080");
 
-  // TODO: 画面2からの信号を受け取ったら setStartMoving(true) を実行する
   useEffect(() => {
-    const handleStorageChange = () => {
-      if (localStorage.getItem("circleReachedEnd") === "true") {
-        setStartMoving(false); // 円1のアニメーションを停止
-        localStorage.removeItem("circleReachedEnd"); // フラグをリセット
-      }
+    ws.onopen = () => {
+      console.log("WebSocket Connected");
     };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+
+    return () => {
+      ws.close();
+    };
   }, []);
 
-  return <MovingCircle startMoving={startMoving} />;
+  const handleCircleReachEnd = () => {
+    ws.send("startSecondCircle");
+  };
+
+  return (
+    <MovingCircle startMoving={startMoving} onReachEnd={handleCircleReachEnd} />
+  );
 };
 
 export default IndexPage;
+

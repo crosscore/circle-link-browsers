@@ -1,37 +1,37 @@
 // circle-link-browsers/src/components/MovingCircle.js
 import React, { useEffect, useState } from "react";
 
-const MovingCircle = ({ startMoving }) => {
-  const [position, setPosition] = useState(0); // 初期値を0に設定
+const MovingCircle = ({ startMoving, onReachEnd }) => {
+  const [position, setPosition] = useState(0);
   const [diameter, setDiameter] = useState(0);
   const speed = 120; // px per second
   const animationFrameRate = 60; // 60 frames per second
 
   useEffect(() => {
-    // ウィンドウサイズに基づいてdiameterを設定
-    const newDiameter =
-      typeof window !== "undefined" ? window.innerWidth / 5 : 0;
+    const newDiameter = typeof window !== "undefined" ? window.innerWidth / 5 : 0;
     setDiameter(newDiameter);
     setPosition(-newDiameter);
 
-    const moveCircle = () => {
-      setPosition((prevPosition) => {
-        const newPosition = prevPosition + speed / animationFrameRate;
-        if (newPosition >= window.innerWidth - newDiameter) {
-          localStorage.setItem("circleReachedEnd", "true");
-          return window.innerWidth - newDiameter;
-        }
-        return newPosition;
-      });
-    };
-
+    // startMovingがtrueになったときに位置をリセットし、アニメーションを開始
     if (startMoving) {
+      setPosition(-newDiameter); // 位置をリセット
+
+      const moveCircle = () => {
+        setPosition((prevPosition) => {
+          const newPosition = prevPosition + speed / animationFrameRate;
+          if (newPosition >= window.innerWidth - newDiameter) {
+            onReachEnd(); // 円が右端に到達したときのイベント
+            return window.innerWidth - newDiameter;
+          }
+          return newPosition;
+        });
+      };
+
       const interval = setInterval(moveCircle, 1000 / animationFrameRate);
       return () => clearInterval(interval);
     }
-  }, [startMoving]);
+  }, [startMoving, onReachEnd]); // onReachEndを依存配列に追加
 
-  // diameterが設定された後でスタイルを定義
   const circleStyle =
     diameter > 0 && typeof window !== "undefined"
       ? {
@@ -41,7 +41,7 @@ const MovingCircle = ({ startMoving }) => {
           backgroundColor: "blue",
           position: "absolute",
           left: position,
-          top: window.innerHeight / 2 - diameter / 2, // 中央に配置
+          top: window.innerHeight / 2 - diameter / 2,
         }
       : null;
 
