@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 const MovingCircle = ({ startMoving, onReachEnd }) => {
-  const [position, setPosition] = useState(-100);
+  const [position, setPosition] = useState(0);
   const [diameter, setDiameter] = useState(0); // diameterをステートとして管理
   const speed = 120; // px per second
   const animationFrameRate = 60; // 60 frames per second
