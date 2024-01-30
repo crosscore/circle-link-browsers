@@ -1,16 +1,20 @@
 // circle-link-browsers/src/pages/second.js
-import React, { useState, useEffect } from "react";
-import MovingCircle from "../components/MovingCircle";
+import React, { useState, useEffect } from 'react';
+import MovingCircle from '../components/MovingCircle';
 
 const SecondPage = () => {
   const [startMoving, setStartMoving] = useState(false);
-  const ws = new WebSocket("ws://localhost:8080");
+  const ws = new WebSocket('ws://localhost:8080');
 
   useEffect(() => {
     ws.onmessage = (event) => {
-      if (event.data === "startSecondCircle") {
+      if (event.data === 'startSecondCircle') {
         setStartMoving(true);
       }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket Disconnected');
     };
 
     return () => {
@@ -22,3 +26,4 @@ const SecondPage = () => {
 };
 
 export default SecondPage;
+

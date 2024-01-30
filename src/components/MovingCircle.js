@@ -2,38 +2,38 @@
 import React, { useEffect, useState } from "react";
 
 const MovingCircle = ({ startMoving, onReachEnd }) => {
-  const [position, setPosition] = useState(0);
-  const [diameter, setDiameter] = useState(0);
+  const [position, setPosition] = useState(-100);
+  const [diameter, setDiameter] = useState(0); // diameterをステートとして管理
   const speed = 120; // px per second
   const animationFrameRate = 60; // 60 frames per second
 
   useEffect(() => {
-    const newDiameter = typeof window !== "undefined" ? window.innerWidth / 5 : 0;
-    setDiameter(newDiameter);
-    setPosition(-newDiameter);
+    // ウィンドウが利用可能か確認し、diameterを設定
+    if (typeof window !== "undefined") {
+      setDiameter(window.innerWidth / 5);
+      setPosition(-window.innerWidth / 5); // 位置をリセット
+    }
 
-    // startMovingがtrueになったときに位置をリセットし、アニメーションを開始
+    const moveCircle = () => {
+      setPosition((prevPosition) => {
+        const newPosition = prevPosition + speed / animationFrameRate;
+        if (newPosition > window.innerWidth) {
+          onReachEnd();
+          return window.innerWidth; // Stop the circle when it reaches the end of the screen
+        }
+        return newPosition;
+      });
+    };
+
     if (startMoving) {
-      setPosition(-newDiameter); // 位置をリセット
-
-      const moveCircle = () => {
-        setPosition((prevPosition) => {
-          const newPosition = prevPosition + speed / animationFrameRate;
-          if (newPosition >= window.innerWidth - newDiameter) {
-            onReachEnd(); // 円が右端に到達したときのイベント
-            return window.innerWidth - newDiameter;
-          }
-          return newPosition;
-        });
-      };
-
       const interval = setInterval(moveCircle, 1000 / animationFrameRate);
       return () => clearInterval(interval);
     }
-  }, [startMoving, onReachEnd]); // onReachEndを依存配列に追加
+  }, [startMoving, onReachEnd]);
 
+  // スタイルを動的に生成
   const circleStyle =
-    diameter > 0 && typeof window !== "undefined"
+    diameter > 0
       ? {
           width: diameter,
           height: diameter,
@@ -41,7 +41,10 @@ const MovingCircle = ({ startMoving, onReachEnd }) => {
           backgroundColor: "blue",
           position: "absolute",
           left: position,
-          top: window.innerHeight / 2 - diameter / 2,
+          top:
+            typeof window !== "undefined"
+              ? window.innerHeight / 2 - diameter / 2
+              : 0, // Center vertically
         }
       : null;
 

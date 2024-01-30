@@ -1,14 +1,18 @@
 // circle-link-browsers/src/pages/index.js
-import React, { useState, useEffect } from "react";
-import MovingCircle from "../components/MovingCircle";
+import React, { useState, useEffect } from 'react';
+import MovingCircle from '../components/MovingCircle';
 
 const IndexPage = () => {
   const [startMoving, setStartMoving] = useState(true);
-  const ws = new WebSocket("ws://localhost:8080");
+  const ws = new WebSocket('ws://localhost:8080');
 
   useEffect(() => {
     ws.onopen = () => {
-      console.log("WebSocket Connected");
+      console.log('WebSocket Connected');
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket Disconnected');
     };
 
     return () => {
@@ -17,13 +21,10 @@ const IndexPage = () => {
   }, []);
 
   const handleCircleReachEnd = () => {
-    ws.send("startSecondCircle");
+    ws.send('startSecondCircle');
   };
 
-  return (
-    <MovingCircle startMoving={startMoving} onReachEnd={handleCircleReachEnd} />
-  );
+  return <MovingCircle startMoving={startMoving} onReachEnd={handleCircleReachEnd} />;
 };
 
 export default IndexPage;
-
