@@ -4,17 +4,17 @@ import MovingCircle from '../components/MovingCircle';
 
 const SecondPage = () => {
   const [startMoving, setStartMoving] = useState(false);
-  const ws = new WebSocket('ws://localhost:8081');
+  const ws = new WebSocket("ws://localhost:8081");
 
   useEffect(() => {
     ws.onmessage = (event) => {
-      if (event.data === 'startSecondCircle') {
+      if (event.data === "startSecondCircle") {
         setStartMoving(true);
       }
     };
 
     ws.onclose = () => {
-      console.log('WebSocket Disconnected');
+      console.log("WebSocket Disconnected");
     };
 
     return () => {
@@ -22,7 +22,18 @@ const SecondPage = () => {
     };
   }, []);
 
-  return <MovingCircle startMoving={startMoving} />;
+  return (
+    <div
+      style={{
+        overflow: "hidden",
+        position: "relative",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
+      <MovingCircle startMoving={startMoving} />
+    </div>
+  );
 };
 
 export default SecondPage;

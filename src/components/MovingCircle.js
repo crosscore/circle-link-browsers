@@ -7,32 +7,29 @@ const MovingCircle = ({ startMoving, onReachEnd }) => {
   const speed = 120; // px per second
   const animationFrameRate = 60; // 60 frames per second
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Set the diameter to 1/5 of the screen width
-      setDiameter(window.innerWidth / 5);
-      // Set the starting position to the left of the screen
-      setPosition(-window.innerWidth / 5);
-    }
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const newDiameter = window.innerWidth / 5;
+    setDiameter(newDiameter);
+    setPosition(-newDiameter);
+  }
 
-    const moveCircle = () => {
-      setPosition((prevPosition) => {
-        const newPosition = prevPosition + speed / animationFrameRate;
-        if (newPosition > window.innerWidth) {
-          onReachEnd();
-          return window.innerWidth; // Stop the circle when it reaches the end of the screen
-        }
-        return newPosition;
-      });
-    };
+  const moveCircle = () => {
+    setPosition((prevPosition) => {
+      const newPosition = prevPosition + speed / animationFrameRate;
+      if (newPosition > window.innerWidth) {
+        onReachEnd(newPosition); // newPositionを引数として渡す
+      }
+      return newPosition;
+    });
+  };
 
-    if (startMoving) {
-      const interval = setInterval(moveCircle, 1000 / animationFrameRate);
-      return () => clearInterval(interval);
-    }
-  }, [startMoving, onReachEnd]);
+  if (startMoving) {
+    const interval = setInterval(moveCircle, 1000 / animationFrameRate);
+    return () => clearInterval(interval);
+  }
+}, [startMoving, onReachEnd, diameter]);
 
-  // Set the circle style
   const circleStyle =
     diameter > 0
       ? {

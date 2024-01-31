@@ -1,4 +1,5 @@
 // circle-link-browsers/src/pages/index.js
+// index.js
 import React, { useState, useEffect } from 'react';
 import MovingCircle from '../components/MovingCircle';
 
@@ -20,11 +21,22 @@ const IndexPage = () => {
     };
   }, []);
 
-  const handleCircleReachEnd = () => {
-    ws.send('startSecondCircle');
+  const handleCircleReachEnd = (xPosition) => {
+    ws.send(`Circle reached end: ${xPosition}`);
   };
 
-  return <MovingCircle startMoving={startMoving} onReachEnd={handleCircleReachEnd} />;
+  return (
+    <div
+      style={{
+        overflow: "hidden",
+        position: "relative",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
+      <MovingCircle startMoving={startMoving} onReachEnd={handleCircleReachEnd} />
+    </div>
+  );
 };
 
 export default IndexPage;
