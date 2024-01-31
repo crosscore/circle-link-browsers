@@ -4,7 +4,7 @@ import MovingCircle from '../components/MovingCircle';
 
 const IndexPage = () => {
   const [startMoving, setStartMoving] = useState(true);
-  const ws = new WebSocket('ws://localhost:8080');
+  const ws = new WebSocket('ws://localhost:8081');
 
   useEffect(() => {
     ws.onopen = () => {

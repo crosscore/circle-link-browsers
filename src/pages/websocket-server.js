@@ -1,7 +1,7 @@
 // circle-link-browsers/src/pages/websocket-server.js
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: 8081 });
 
 wss.on('connection', function connection(ws) {
   console.log('WebSocket Connected');
@@ -9,8 +9,6 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
 
-    // ここでメッセージに基づいて何か処理を行う
-    // 例えば、特定のメッセージを受け取ったら他のクライアントにブロードキャストする
     wss.clients.forEach(function each(client) {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(message);
@@ -23,3 +21,8 @@ wss.on('connection', function connection(ws) {
   });
 });
 
+wss.on("listening", () => {
+  console.log(
+    `WebSocket Server is running on port 8081 ... [${new Date().toISOString()}]`
+  );
+});

@@ -2,16 +2,17 @@
 import React, { useEffect, useState } from "react";
 
 const MovingCircle = ({ startMoving, onReachEnd }) => {
-  const [position, setPosition] = useState(0);
-  const [diameter, setDiameter] = useState(0); // diameterをステートとして管理
+  const [position, setPosition] = useState(0); // px
+  const [diameter, setDiameter] = useState(0);
   const speed = 120; // px per second
   const animationFrameRate = 60; // 60 frames per second
 
   useEffect(() => {
-    // ウィンドウが利用可能か確認し、diameterを設定
     if (typeof window !== "undefined") {
+      // Set the diameter to 1/5 of the screen width
       setDiameter(window.innerWidth / 5);
-      setPosition(-window.innerWidth / 5); // 位置をリセット
+      // Set the starting position to the left of the screen
+      setPosition(-window.innerWidth / 5);
     }
 
     const moveCircle = () => {
@@ -31,7 +32,7 @@ const MovingCircle = ({ startMoving, onReachEnd }) => {
     }
   }, [startMoving, onReachEnd]);
 
-  // スタイルを動的に生成
+  // Set the circle style
   const circleStyle =
     diameter > 0
       ? {

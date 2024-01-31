@@ -4,7 +4,7 @@ import MovingCircle from '../components/MovingCircle';
 
 const SecondPage = () => {
   const [startMoving, setStartMoving] = useState(false);
-  const ws = new WebSocket('ws://localhost:8080');
+  const ws = new WebSocket('ws://localhost:8081');
 
   useEffect(() => {
     ws.onmessage = (event) => {
@@ -26,4 +26,3 @@ const SecondPage = () => {
 };
 
 export default SecondPage;
-
