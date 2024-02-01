@@ -1,3 +1,4 @@
+// circle-link-browsers/src/components/MovingCircle.js
 import React, { useEffect, useState } from "react";
 
 const MovingCircle = ({ startMoving, onReachEnd, ws, clientName }) => {
@@ -23,13 +24,11 @@ const MovingCircle = ({ startMoving, onReachEnd, ws, clientName }) => {
         const newPosition = prevPosition + speed / animationFrameRate;
         if (newPosition + diameter >= window.innerWidth) {
           onReachEnd(newPosition);
-          if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ client: clientName, type: "endPosition", value: newPosition }));
-          }
+          // Send end position to the server
+          ws.send(JSON.stringify({ client: clientName, type: "endPosition", value: newPosition }));
         } else {
-          if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ client: clientName, type: "newPosition", value: newPosition }));
-          }
+          // Send new position updates to the server
+          ws.send(JSON.stringify({ client: clientName, type: "newPosition", value: newPosition }));
         }
         return Math.min(newPosition, window.innerWidth); // Prevent the circle from going beyond the right edge
       });
