@@ -6,9 +6,10 @@ const IndexPage = () => {
   const [startMoving, setStartMoving] = useState(true);
   const ws = new WebSocket("ws://localhost:8081");
 
-  const handleCircleReachEnd = (xPosition) => {
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ client: "client1", type: "endPosition", value: xPosition }));
+  const handleCircleReachEnd = (xPosition, diameter) => {
+    let circlePositionRight = xPosition + diameter;
+    if (circlePositionRight >= browserWindowWidth) {
+      ws.send(JSON.stringify({ client: 'client1', type: 'endPosition', value: circlePositionRight }));
     }
   };
   

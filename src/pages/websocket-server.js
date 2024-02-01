@@ -2,6 +2,10 @@
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({ port: 8081 });
 
+wss.on("listening", () => {
+  console.log(`WebSocket Server is running on port 8081 ... [${new Date().toISOString()}]`);
+});
+
 wss.on("connection", function connection(ws) {
   ws.on("message", function incoming(data) {
     // Convert the received data to a string and parse it as JSON
@@ -13,9 +17,12 @@ wss.on("connection", function connection(ws) {
     } else {
       console.log("message from unknown client:", message);
     }
-  });
-});
 
-wss.on("listening", () => {
-  console.log(`WebSocket Server is running on port 8081 ... [${new Date().toISOString()}]`);
+    // Broadcast the message to all clients except the sender
+    wss.clients.forEach(function each(client) {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message);
+    }
+  });
+  });
 });
