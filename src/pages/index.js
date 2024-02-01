@@ -1,5 +1,4 @@
 // circle-link-browsers/src/pages/index.js
-// index.js
 import React, { useState, useEffect } from 'react';
 import MovingCircle from '../components/MovingCircle';
 
