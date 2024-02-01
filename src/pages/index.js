@@ -1,39 +1,23 @@
 // circle-link-browsers/src/pages/index.js
-import React, { useState, useEffect } from 'react';
-import MovingCircle from '../components/MovingCircle';
+import React, { useState, useEffect } from "react";
+import MovingCircle from "../components/MovingCircle";
 
 const IndexPage = () => {
   const [startMoving, setStartMoving] = useState(true);
-  const ws = new WebSocket('ws://localhost:8081');
+  const ws = new WebSocket("ws://localhost:8081");
 
-  useEffect(() => {
-    ws.onopen = () => {
-      console.log('WebSocket Connected');
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket Disconnected');
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
+  // WebSocket connection setup and cleanup...
 
   const handleCircleReachEnd = (xPosition) => {
-    ws.send(`Circle reached end: ${xPosition}`);
+    // Send a message with the xPosition
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "endPosition", value: xPosition }));
+    }
   };
 
   return (
-    <div
-      style={{
-        overflow: "hidden",
-        position: "relative",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
-      <MovingCircle startMoving={startMoving} onReachEnd={handleCircleReachEnd} />
+    <div style={{overflow: "hidden", position: "relative", width: "100vw", height: "100vh",}}>
+      <MovingCircle startMoving={startMoving} onReachEnd={handleCircleReachEnd} ws={ws} />
     </div>
   );
 };

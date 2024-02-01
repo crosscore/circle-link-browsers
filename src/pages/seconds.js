@@ -1,6 +1,6 @@
-// circle-link-browsers/src/pages/second.js
-import React, { useState, useEffect } from 'react';
-import MovingCircle from '../components/MovingCircle';
+// seconds.js
+import React, { useState, useEffect } from "react";
+import MovingCircle from "../components/MovingCircle";
 
 const SecondPage = () => {
   const [startMoving, setStartMoving] = useState(false);
@@ -8,13 +8,11 @@ const SecondPage = () => {
 
   useEffect(() => {
     ws.onmessage = (event) => {
-      if (event.data === "startSecondCircle") {
-        setStartMoving(true);
+      const message = JSON.parse(event.data);
+      // Check if the message indicates that Circle 1 has reached the end
+      if (message.type === "endPosition") {
+        setStartMoving(true); // Start moving Circle 2
       }
-    };
-
-    ws.onclose = () => {
-      console.log("WebSocket Disconnected");
     };
 
     return () => {
@@ -31,7 +29,7 @@ const SecondPage = () => {
         height: "100vh",
       }}
     >
-      <MovingCircle startMoving={startMoving} />
+      <MovingCircle startMoving={startMoving} ws={ws} />
     </div>
   );
 };
