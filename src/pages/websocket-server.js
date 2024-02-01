@@ -4,7 +4,6 @@ const wss = new WebSocket.Server({ port: 8081 });
 
 wss.on("connection", function connection(ws) {
   ws.on("message", function incoming(data) {
-    // Log any data received from the client
     const message = data.toString();
     console.log("message from client:", message);
   });

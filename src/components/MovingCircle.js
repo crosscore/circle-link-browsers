@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const MovingCircle = ({ startMoving, onReachEnd, ws }) => {
+const MovingCircle = ({ startMoving, onReachEnd, ws, clientName }) => {
   const [position, setPosition] = useState(0); // px
   const [diameter, setDiameter] = useState(0);
   const speed = 120; // px per second
@@ -9,13 +9,12 @@ const MovingCircle = ({ startMoving, onReachEnd, ws }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const newDiameter = window.innerWidth / 5;
-      console.log("Circle diameter:", newDiameter); // Log the diameter
       setDiameter(newDiameter);
       setPosition(-newDiameter);
 
-      // Send circle diameter to the server
+      // Send circle diameter to the server as a WebSocket message
       if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ type: "diameter", value: newDiameter , windowsWidth: window.innerWidth}));
+        ws.send(JSON.stringify({ client: clientName, type: "diameter", value: newDiameter }));
       }
     }
 
@@ -24,14 +23,12 @@ const MovingCircle = ({ startMoving, onReachEnd, ws }) => {
         const newPosition = prevPosition + speed / animationFrameRate;
         if (newPosition + diameter >= window.innerWidth) {
           onReachEnd(newPosition);
-          // Send end position to the server
           if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: "endPosition", value: newPosition }));
+            ws.send(JSON.stringify({ client: clientName, type: "endPosition", value: newPosition }));
           }
         } else {
-          // Send new position updates to the server
           if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: "newPosition", value: newPosition }));
+            ws.send(JSON.stringify({ client: clientName, type: "newPosition", value: newPosition }));
           }
         }
         return Math.min(newPosition, window.innerWidth); // Prevent the circle from going beyond the right edge
@@ -42,7 +39,7 @@ const MovingCircle = ({ startMoving, onReachEnd, ws }) => {
       const interval = setInterval(moveCircle, 1000 / animationFrameRate);
       return () => clearInterval(interval);
     }
-  }, [startMoving, onReachEnd, diameter, ws]);
+  }, [startMoving, onReachEnd, diameter, ws, clientName]);
 
   const circleStyle =
     diameter > 0

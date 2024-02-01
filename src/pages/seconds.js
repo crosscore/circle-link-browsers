@@ -9,9 +9,8 @@ const SecondPage = () => {
   useEffect(() => {
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      // Check if the message indicates that Circle 1 has reached the end
-      if (message.type === "endPosition") {
-        setStartMoving(true); // Start moving Circle 2
+      if (message.client === "client1" && message.type === "endPosition") {
+        setStartMoving(true);
       }
     };
 
@@ -21,15 +20,8 @@ const SecondPage = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        overflow: "hidden",
-        position: "relative",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
-      <MovingCircle startMoving={startMoving} ws={ws} />
+    <div style={{ overflow: "hidden", position: "relative", width: "100vw", height: "100vh" }}>
+      <MovingCircle startMoving={startMoving} ws={ws} clientName="client2" />
     </div>
   );
 };
