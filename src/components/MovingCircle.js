@@ -10,7 +10,7 @@ const MovingCircle = ({ startMoving, onReachEnd, ws, clientName }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const newDiameter = window.innerWidth / 5;
-      setCircleDiameter(newDiameter); // 名前を変更
+      setCircleDiameter(newDiameter);
       setPosition(-newDiameter);
 
       // Send circle diameter to the server as a WebSocket message
@@ -22,9 +22,8 @@ const MovingCircle = ({ startMoving, onReachEnd, ws, clientName }) => {
     const moveCircle = () => {
       setPosition((prevPosition) => {
         const newPosition = prevPosition + speed / animationFrameRate;
-        if (newPosition + newDiameter >= window.innerWidth) {
-          onReachEnd(newPosition, newDiameter);
-          // Send end position to the server
+        if (newPosition + circleDiameter >= window.innerWidth) {  // newDiameterをcircleDiameterに変更
+          onReachEnd(newPosition, circleDiameter);  // newDiameterをcircleDiameterに変更
           ws.send(JSON.stringify({ client: clientName, type: "endPosition", value: newPosition }));
         } else {
           // Send new position updates to the server

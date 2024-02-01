@@ -17,12 +17,12 @@ wss.on("connection", function connection(ws) {
     } else {
       console.log("message from unknown client:", message);
     }
+  });
+});
 
-    // Broadcast the message to all clients except the sender
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-    }
-  });
-  });
+// Broadcast the message to all clients except the sender
+wss.clients.forEach(function each(client) {
+  if (client !== ws && client.readyState === WebSocket.OPEN) {
+    client.send(JSON.stringify(message)); // Convert the message to a string and send it
+  }
 });
