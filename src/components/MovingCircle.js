@@ -22,8 +22,8 @@ const MovingCircle = ({ startMoving, onReachEnd, ws, clientName }) => {
     const moveCircle = () => {
       setPosition((prevPosition) => {
         const newPosition = prevPosition + speed / animationFrameRate;
-        if (newPosition + circleDiameter >= window.innerWidth) {  // newDiameterをcircleDiameterに変更
-          onReachEnd(newPosition, circleDiameter);  // newDiameterをcircleDiameterに変更
+        if (newPosition + circleDiameter >= window.innerWidth) {
+          onReachEnd(newPosition, circleDiameter);
           ws.send(JSON.stringify({ client: clientName, type: "endPosition", value: newPosition }));
         } else {
           // Send new position updates to the server
