@@ -27,7 +27,9 @@ const MovingCircle = ({ startMoving, onReachEnd, ws, clientName }) => {
           ws.send(JSON.stringify({ client: clientName, type: "endPosition", value: newPosition }));
         } else {
           // Send new position updates to the server
-          ws.send(JSON.stringify({ client: clientName, type: "newPosition", value: newPosition }));
+          if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ client: clientName, type: "newPosition", value: newPosition }));
+          }
         }
         return Math.min(newPosition, window.innerWidth); // Prevent the circle from going beyond the right edge
       });
